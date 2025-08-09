@@ -1,0 +1,40 @@
+Docker Summary
+📘 Overview
+Docker is an open platform that isolates applications from the OS, accelerating development, deployment, and scaling. It supports multiple lightweight containers, enabling frequent releases with efficiency, portability, and speed.
+
+⚙️ Workflow
+Write & test the application.
+
+Build a container image (via Dockerfile).
+
+Push the image to a registry.
+
+Start the application.
+
+Maintain the application lifecycle.
+
+🛠 Commands & Resource Provisioning
+docker run [OPTIONS] IMAGE – start container.
+
+docker stop (graceful) / docker kill (force).
+
+docker ps / docker ls – list containers.
+
+docker rm – remove containers.
+
+docker rmi – remove images.
+
+🧩 Key Concepts
+Image vs Container – Image is the blueprint; container is the running instance.
+
+Base Image (scratch) vs Parent Image (e.g., Ubuntu).
+
+Dockerfiles define build instructions; supports Git URLs.
+
+🚀 Use Cases
+Microservices (isolation, developer productivity).
+
+Cloud applications (cost control, rapid deployment).
+
+📌 Course Takeaway
+End-to-end understanding of Docker’s services, workflow, image/container management, and practical deployment benefits.
