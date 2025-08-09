@@ -1,0 +1,73 @@
+Kubernetes Overview
+📌 Introduction
+In modern infrastructure, scaling and automation are critical. Kubernetes (K8s) is an open-source orchestration platform that automates deployment, scaling, and management of containerized applications.
+
+⚙️ Kubernetes Foundation
+Runs applications across a cluster of machines.
+
+Master node manages the cluster; worker nodes run containerized workloads.
+
+Core components:
+
+API Server – communication hub (used by kubectl)
+
+Scheduler – assigns workloads
+
+Controller Manager – ensures desired state
+
+Kubelet – manages node containers
+
+Kube-proxy – networking
+
+etcd – key-value store for cluster state
+
+🧩 Key Concepts
+Cluster – group of nodes.
+
+Pod – smallest deployable unit (1+ containers).
+
+Volume / Persistent Volume – persistent data storage.
+
+Manifests – declarative definitions of desired state.
+
+Tools: kubectl, Minikube, Helm, Terraform, EKS, Rancher, Loft.
+
+🔄 Workflow
+Application packaged in Docker.
+
+Deploy to K8s via manifests.
+
+K8s schedules, runs, and maintains desired state automatically.
+
+Scale up/down and self-heal as needed.
+
+🔐 Security
+Restrict API and kubelet access.
+
+Secure etcd and isolate nodes.
+
+Enable audit logging.
+
+Use identity providers (GitHub, Google).
+
+Tools like Aqua enhance security posture.
+
+🚀 Use Cases
+CI/CD pipelines
+
+Serverless architectures
+
+IoT deployments
+
+High-performance computing (HPC)
+
+Machine learning workloads
+
+Self-healing services
+
+Lift-and-shift application migration
+
+🆚 Kubernetes vs Docker
+Docker – container runtime, image building, Swarm orchestration.
+
+Kubernetes – container orchestration, scaling, automation, and extensibility.
