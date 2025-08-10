@@ -1,0 +1,122 @@
+# Chef Platform Overview
+
+## Introduction
+
+Chef is a powerful automation platform that turns infrastructure into code, enabling scaling, compliance, and automation for on-prem, cloud, or hybrid environments.
+
+---
+
+## Key Components
+
+- **Chef Infra** – Core platform for infrastructure automation.
+- **Chef Workstation** – Author cookbooks, test, and manage infrastructure code.
+- **Chef Habitat** – Application automation (build, package, deliver).
+- **Chef InSpec** – Compliance and security testing framework.
+- **Chef Supermarket** – Community repository for cookbooks.
+
+---
+
+## Use Cases
+
+- Patch management
+- Compliance (e.g., PCI DSS, GDPR)
+- Application deployment & modernization
+- Continuous delivery & DevSecOps
+- Integration with Docker, Azure, Kubernetes, VMs
+
+---
+
+## Prerequisites
+
+- Chef Infra Server with minimum specs: 64-bit CPU, 4 cores, 8GB+ RAM
+- Required software: Git, NTP, Mail Relay, Cron
+- Firewall, ports, and hostname configuration
+- Communication setup between Chef Client and Server
+- Ruby (underlying language for Chef)
+
+---
+
+## Ruby in Chef
+
+- Resources share common properties: actions, notifications, retries, guards, etc.
+- Guard properties determine execution flow.
+- Supports compile-time execution, error handling, and relative paths.
+
+---
+
+## Chef Automate
+
+- Dashboard for metrics and compliance history
+- CI/CD pipelines
+- Aggregates data from Chef Infra and InSpec
+- Core features: Infrastructure automation, app automation, security automation
+
+---
+
+## Chef Habitat
+
+- **Define** – Standardized development model
+- **Package** – Build isolated, dependency-contained artifacts (.HART)
+- **Deliver** – Manage apps via Habitat Supervisor
+- Habitat Builder: Storage, search, API integration
+
+---
+
+## Chef Infra
+
+- Manages configuration across Windows, Linux, ARM, Mac
+- Uses declarative language
+- Components: Workstation, Cookbooks, Ruby, Nodes, Client, Server
+- Eliminates drift with version control
+
+---
+
+## Chef InSpec
+
+- Security & compliance automation
+- Platform-agnostic testing
+- Converts compliance requirements into automated tests
+- Supports continuous compliance auditing
+
+---
+
+## Security, Compliance & Auditing
+
+- Cloud Security Posture Management (CSPM)
+- Policy as code, deviation detection, automated remediation
+- Continuous compliance and streamlined audits
+
+---
+
+## Infrastructure Management
+
+- Use cookbooks for consistent, repeatable deployments
+- Community-driven solutions for faster start
+- Benefits: Visibility, scalability, safety, insights
+- Can extend towards AIOps
+
+---
+
+## Application Delivery
+
+- Works for on-prem, cloud, and hybrid
+- Automates packaging, deployment, and updates
+- Reduces tech debt, modernizes processes
+- Enables rapid deployment and productivity
+
+---
+
+## Chef vs Ansible
+
+| Feature     | Chef                           | Ansible                           |
+| ----------- | ------------------------------ | --------------------------------- |
+| Language    | Ruby                           | YAML                              |
+| Config Flow | Pull method                    | Push method                       |
+| Learning    | Steeper curve                  | Easier for beginners              |
+| Cost        | Higher                         | Lower                             |
+| Strength    | Extensibility, compliance      | Simplicity, speed for small tasks |
+| Weakness    | Requires programming expertise | Limited for complex workflows     |
+
+> Chef is ideal for complex, compliance-heavy environments, while Ansible suits simpler automation needs.
+
+---
