@@ -1,0 +1,57 @@
+Introduction to Jenkins for DevOps
+Overview
+Jenkins is a widely used open-source CI/CD tool that automates building, testing, and deployment. It supports multiple plugins, integrates with services like EKS and ECS, and works across diverse environments without licensing costs.
+
+Continuous Integration (CI)
+Automates code integration from multiple developers.
+
+Runs tests on each commit, identifies issues early, and speeds up fixes.
+
+Server-based with easy setup and broad plugin support.
+
+Role in DevOps
+Central to development, testing, and deployment pipelines.
+
+Architecture: Master–Slave model for distributed builds.
+
+Automates code integration and delivery for faster releases.
+
+Jenkins & CI/CD
+Distributed via WAR files, installers, Docker images, Homebrew, or source code.
+
+Supports six job types and plugin categories (UI, build mgmt, SCM, etc.).
+
+Pipelines: Created via Jenkinsfile, Web UI, or scripts (Declarative & Scripted).
+
+Docker Integration
+Jenkins can run inside Docker or orchestrate Docker-based builds.
+
+Requires Java and supported OS (Linux/Windows) plus browser access.
+
+Ansible Automation
+Jenkins can trigger Ansible to provision and deploy applications to production.
+
+AWS Integration
+Works with Amazon VPC, EC2, ECS, and CodeBuild.
+
+Involves creating key pairs, security groups, and configuring Jenkins on a VM.
+
+Git Integration
+Connect GitHub to Jenkins via SSH keys for source code pulls and build triggers.
+
+Email Notifications
+Notifies teams of pre- and post-deployment issues.
+
+Configurable triggers, recipients, and content via the Email Extension Plugin.
+
+Supports tokens, custom subjects, attachments, and pipeline integration.
+
+Maven Integration
+Automates builds, dependency management, and documentation generation.
+
+Uses POM.xml to define builds and integrates seamlessly with Jenkins.
+
+Job Building in Jenkins
+Core build process: Freestyle or Maven projects.
+
+Jobs can run manually or automatically (GitHub hooks, SCM polling, remote triggers, post-build triggers).
