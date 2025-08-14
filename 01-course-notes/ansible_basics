@@ -1,0 +1,306 @@
+# Ansible Basics
+
+Ansible is an open-source automation tool for configuration management, application deployment, and orchestration. It uses agentless SSH/WINRM connections and YAML for human-readable automation.
+
+## 1. Installation
+
+### macOS (Homebrew)
+```bash
+brew install ansible
+ansible --version
+```
+
+### Python/pip (any OS with Python)
+```bash
+python -m pip install --user ansible
+ansible --version
+```
+
+**Tip:** Prefer SSH keys over passwords. `sshpass` is available but generally discouraged:
+```bash
+brew install hudochenkov/sshpass/sshpass   # if you really need it
+```
+
+## 2. Configuration
+
+### Config File Precedence
+1. `ANSIBLE_CONFIG` (environment variable)
+2. `./ansible.cfg` (project directory)
+3. `~/.ansible.cfg` (user home)
+4. `/etc/ansible/ansible.cfg` (system-wide)
+
+### Generate and Inspect Config
+```bash
+ansible-config init --disabled > ansible.cfg
+ansible-config dump --only-changed
+```
+
+### Minimal ansible.cfg Example
+```ini
+[defaults]
+inventory = ./inventory
+host_key_checking = False
+forks = 20
+timeout = 30
+interpreter_python = auto
+retry_files_enabled = False
+stdout_callback = yaml
+callbacks_enabled = timer
+```
+
+You can also set inventory via environment variable:
+```bash
+export ANSIBLE_INVENTORY=./inventory
+```
+
+## 3. Inventory
+
+Define where automation runs. Supports INI and YAML formats.
+
+### INI Format Example
+```ini
+[web]
+web1 ansible_host=10.0.0.11
+web2 ansible_host=10.0.0.12
+
+[db]
+db1 ansible_host=10.0.0.21
+
+[all:vars]
+ansible_user=ec2-user
+ansible_ssh_private_key_file=~/.ssh/id_rsa
+```
+
+### YAML Format Example
+```yaml
+all:
+  vars:
+    ansible_user: ec2-user
+  children:
+    web:
+      hosts:
+        web1: { ansible_host: 10.0.0.11 }
+        web2: { ansible_host: 10.0.0.12 }
+    db:
+      hosts:
+        db1: { ansible_host: 10.0.0.21 }
+```
+
+### Inventory Helpers
+```bash
+ansible-inventory -i inventory --graph
+ansible-inventory -i inventory --list
+```
+
+**Note:** Default groups are `all` and `ungrouped`.
+
+## 4. Ad-Hoc Commands
+
+Great for quick checks:
+
+```bash
+ansible all -m ping
+ansible web -a "uptime"
+ansible web -a "neofetch"
+ansible db -m shell -a "ps aux | wc -l"
+```
+
+## 5. Playbooks (YAML)
+
+Define what to do and in what order.
+
+### Minimal Example - Install & Start Apache (RHEL-like)
+```yaml
+---
+- name: Configure web servers
+  hosts: web
+  become: true
+  tasks:
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: present
+
+    - name: Enable and start httpd
+      service:
+        name: httpd
+        state: started
+        enabled: true
+```
+
+### Run Playbook
+```bash
+ansible-playbook -i inventory site.yml
+```
+
+**Common modules:** `package`, `yum`/`apt`, `service`, `copy`, `template`, `user`, `file`, `shell`/`command`, `git`, `uri`.
+
+## 6. Variables, Templates, and Handlers
+
+### Variables (Jinja2)
+```yaml
+vars:
+  http_port: 80
+
+tasks:
+  - name: Show port
+    debug: msg="Listening on {{ http_port }}"
+```
+
+### Templates (templates/vhost.j2)
+```nginx
+server {
+  listen {{ http_port }};
+  server_name {{ inventory_hostname }};
+}
+```
+
+### Handlers (notify on change)
+```yaml
+- name: Deploy config
+  template:
+    src: templates/vhost.j2
+    dest: /etc/httpd/conf.d/app.conf
+  notify: Restart httpd
+
+handlers:
+  - name: Restart httpd
+    service:
+      name: httpd
+      state: restarted
+```
+
+## 7. CLI Power-Ups
+
+| Command | Description |
+|---------|-------------|
+| `--check` | Check mode (dry run) |
+| `--diff` | Diff mode (show changes) |
+| `--limit web1` | Limit scope to specific hosts |
+| `-t setup` | Run specific tags |
+| `--skip-tags slow` | Skip specific tags |
+| `-v`, `-vv`, `-vvv` | Increase verbosity |
+| `--step` | Step mode (press 'c' to continue) |
+| `--start-at-task "Task Name"` | Start at specific task |
+
+### Troubleshoot a Single Task
+```yaml
+- name: Install httpd
+  yum:
+    name: httpd
+    state: present
+  tags: install
+```
+
+```bash
+ansible-playbook site.yml -t install -vv
+```
+
+## 8. Roles & Project Structure (Best Practice)
+
+### Standard Layout
+```
+project/
+├── ansible.cfg
+├── inventory
+├── group_vars/
+│   ├── all.yml
+│   └── web.yml
+├── roles/
+│   └── web/
+│       ├── defaults/main.yml
+│       ├── files/
+│       ├── handlers/main.yml
+│       ├── tasks/main.yml
+│       ├── templates/
+│       └── vars/main.yml
+└── site.yml
+```
+
+### Using Roles in site.yml
+```yaml
+- hosts: web
+  become: true
+  roles:
+    - role: web
+```
+
+**Why roles?** Reusability, readability, and easier testing.
+
+## 9. Plugins & Collections
+
+### Install Collections
+```bash
+ansible-galaxy collection install amazon.aws
+ansible-galaxy collection install google.cloud
+```
+
+### Use in Playbooks
+```yaml
+- hosts: localhost
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Get caller identity
+      aws_caller_info:
+```
+
+## 10. Security & Vault
+
+### Encrypt Sensitive Data
+```bash
+ansible-vault create secrets.yml
+ansible-vault edit secrets.yml
+ansible-playbook site.yml --ask-vault-pass
+```
+
+### Best Practices
+- Use RBAC on your VCS/CI
+- Keep secrets in Vault or a dedicated secrets manager
+- Separate staging and production inventories
+- Always name tasks (easier debugging)
+- Keep playbooks idempotent and simple
+
+## 11. Troubleshooting Checklist
+
+1. **Increase verbosity:** `-vvv`
+2. **Validate inventory:** `ansible-inventory --graph`
+3. **Confirm connectivity:** `ansible all -m ping`
+4. **Dry run first:** `--check --diff`
+5. **Narrow the blast radius:** `--limit`, tags
+6. **Use step mode for stubborn playbooks:** `--step`
+
+---
+
+## Quick Reference
+
+### Essential Commands
+```bash
+# Test connectivity
+ansible all -m ping
+
+# Run playbook
+ansible-playbook site.yml
+
+# Dry run with diff
+ansible-playbook site.yml --check --diff
+
+# Run with specific tags
+ansible-playbook site.yml -t setup
+
+# Limit to specific hosts
+ansible-playbook site.yml --limit web1
+
+# Verbose output
+ansible-playbook site.yml -vvv
+```
+
+### Common Modules
+- **package/yum/apt**: Package management
+- **service**: Service management
+- **copy/template**: File operations
+- **user**: User management
+- **file**: File/directory operations
+- **shell/command**: Execute commands
+- **git**: Git operations
+- **uri**: HTTP requests
