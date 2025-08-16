@@ -1,0 +1,132 @@
+# Ansible Basics
+
+Ansible is an **IT automation engine** that simplifies configuration management, application deployment, and orchestration. It is **agentless**, requires **no custom security infrastructure**, and supports **multi-tier deployments**.
+
+It works by using **modules** to execute tasks on managed nodes, then removes them after execution. Hosts are defined in **INI or plain text inventory** files, often using FQDNs.
+
+---
+
+## 📌 1. Ansible Anatomy
+
+- **Control Node** – Where Ansible is installed and commands are run.
+- **Managed Nodes** – Systems Ansible manages over SSH or WinRM.
+- **Inventory** – List of target hosts and groups.
+- **Playbooks** – YAML files containing **plays** (task sets).
+- **Modules** – Units of work (e.g., install packages, manage files).
+- **Plugins** – Extend Ansible’s core functionality.
+- **Roles** – Structured way to organize playbooks.
+- **Handlers** – Triggered tasks run only when notified.
+- **Collections** – Bundles of modules, roles, and plugins (via Ansible Galaxy).
+
+**Useful Flags:**
+
+```
+-i   inventory file
+-u   SSH user
+-k   SSH password prompt
+-f   Forks (parallelism)
+-T   Timeout
+-t   Tags to run specific tasks
+-m   Load a local module
+```
+
+---
+
+## 📌 2. Automation & Integration
+
+Ansible reduces **complexity**, avoids **repetition**, and improves **productivity** by automating routine tasks.
+Benefits include:
+✅ Fewer mistakes
+✅ Improved collaboration & accountability
+✅ Cross-platform integration (OS, storage, virtualization)
+
+---
+
+## 📌 3. Network Automation
+
+- Use **collections** for platform-specific modules.
+- Supports **privilege escalation**.
+- Enables **infrastructure awareness** for dynamic environments.
+
+---
+
+## 📌 4. Ansible Engine & Tower
+
+- **Ansible Engine** – Core automation solution for production use.
+- **Ansible Tower** – Web UI & dashboard for:
+
+  - Role-Based Access Control (RBAC)
+  - Automation workflows
+  - REST API
+  - Inventory management
+
+---
+
+## 📌 5. Commands & Tools
+
+| Command            | Purpose                               |
+| ------------------ | ------------------------------------- |
+| `ansible`          | Run ad-hoc commands                   |
+| `ansible-playbook` | Execute playbooks                     |
+| `ansible-doc`      | Show module documentation             |
+| `ansible-galaxy`   | Manage collections and roles          |
+| `ansible-pull`     | Pull playbooks from a VCS and execute |
+
+---
+
+## 📌 6. Patterns, Hosts & Groups
+
+- Patterns depend on inventory and **must match syntax**.
+- Use `group_vars/` directory to store variables.
+
+---
+
+## 📌 7. Orchestration
+
+Orchestration is **workflow execution**, combining multiple tasks into a sequence.
+Examples:
+
+- Define infrastructure
+- Orchestrate OpenStack
+- Trigger configuration changes in the correct order
+
+---
+
+## 📌 8. Ansible Vault
+
+- Encrypt sensitive variables and files.
+
+```bash
+ansible-vault create secrets.yml
+```
+
+- Access via password or **Vault ID**.
+
+---
+
+## 📌 9. YAML Playbooks
+
+Playbooks define **repeatable, version-controlled** automation processes in YAML.
+Example:
+
+```yaml
+- name: Install Apache
+  hosts: web
+  become: yes
+  tasks:
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: present
+```
+
+---
+
+## 📌 10. Common Use Cases
+
+- Application deployment
+- Orchestration
+- Continuous delivery
+- Network automation
+
+---
